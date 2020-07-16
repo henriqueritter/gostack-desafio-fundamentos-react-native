@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { ProductImage } from 'src/pages/Dashboard/styles';
+import { createUnionTypeNode } from 'typescript';
 import {
   Container,
   CartPricing,
@@ -36,10 +37,9 @@ const FloatingCart: React.FC = () => {
 
   const totalItensInCart = useMemo(() => {
     const count = products.reduce((acc, product) => {
-      return acc * product.quantity;
-
-      return count;
+      return acc + product.quantity;
     }, 0);
+    return count;
   }, [products]);
 
   return (

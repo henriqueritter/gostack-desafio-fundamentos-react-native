@@ -29,6 +29,7 @@ const CartProvider: React.FC = ({ children }) => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
+    // AsyncStorage.clear();
     async function loadProducts(): Promise<void> {
       const storageProducts = await AsyncStorage.getItem('@GoMarket:products');
 
@@ -42,29 +43,19 @@ const CartProvider: React.FC = ({ children }) => {
 
   const addToCart = useCallback(
     async product => {
-      // const cartProducts = products.find(prod => prod.id === product.id);
-      // if (cartProducts) {
-      //   // add quantity
-      //   const handledProduct = products.map(prod =>
-      //     prod.id === product.id
-      //       ? { ...product, quantity: prod.quantity + 1 }
-      //       : prod,
-      //   );
-      //   setProducts(handledProduct);
-      // } else {
-      //   setProducts([...products, { ...product, quantity: 1 }]);
-      // }
-      const prodE = products.find(p => p.id === product.id);
-
-      if (prodE) {
-        setProducts(
-          products.map(p =>
-            p.id === product.id ? { ...product, quantity: p.quantity + 1 } : p,
-          ),
+      const cartProducts = products.find(prod => prod.id === product.id);
+      if (cartProducts) {
+        // add quantity
+        const handledProduct = products.map(prod =>
+          prod.id === product.id
+            ? { ...product, quantity: prod.quantity + 1 }
+            : prod,
         );
+        setProducts(handledProduct);
       } else {
         setProducts([...products, { ...product, quantity: 1 }]);
       }
+
       await AsyncStorage.setItem(
         '@GoMarket:products',
         JSON.stringify(products),
@@ -87,8 +78,6 @@ const CartProvider: React.FC = ({ children }) => {
         '@GoMarket:products',
         JSON.stringify(handledProducts),
       );
-
-      // const prod = products.find(product => product.id === id);
     },
     [products],
   );
@@ -107,8 +96,6 @@ const CartProvider: React.FC = ({ children }) => {
         '@GoMarket:products',
         JSON.stringify(handledProducts),
       );
-
-      // const prod = products.find(product => product.id === id);
     },
     [products],
   );
